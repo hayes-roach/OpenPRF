@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="OpenPRF">
+  <rect width="32" height="32" rx="6" fill="#080d08"/>
+  <rect x="1.25" y="1.25" width="29.5" height="29.5" rx="5" fill="#0e150e" stroke="#22331f" stroke-width="1.25"/>
+  <path fill="#3dff7c" d="M10 8h6.8c3.6 0 6.2 2.2 6.2 5.4 0 2.6-1.6 4.5-4 5.1L23.5 24H19l-3.6-5.2H13.2V24H10V8zm3.2 3v4.4h3.2c1.7 0 2.8-.95 2.8-2.2 0-1.3-1.1-2.2-2.8-2.2h-3.2z"/>
+  <rect x="21" y="21.5" width="3.5" height="1.75" rx=".5" fill="#3dff7c" opacity=".85"/>
+</svg>
