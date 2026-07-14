@@ -43,21 +43,21 @@
   .hlink:hover{text-shadow:0 0 6px rgba(61,255,124,.5)}
 
   .header-actions{display:flex;align-items:center;gap:8px}
-  .header-link,.header-coffee{
+  .header-link{
     display:inline-flex;align-items:center;gap:7px;
     padding:6px 12px;text-decoration:none;
     background:var(--panel2);border:1px solid var(--line);border-radius:5px;
     color:var(--text);font-size:11px;font-weight:500;letter-spacing:.02em;text-transform:none;
     transition:background .15s,border-color .15s,color .15s;
   }
-  .header-link:hover,.header-coffee:hover{background:var(--panel);border-color:var(--amber-dim);color:var(--amber)}
-  .header-icon,.header-coffee .bmc-icon{
+  .header-link:hover{background:var(--panel);border-color:var(--amber-dim);color:var(--amber)}
+  .header-icon{
     display:flex;align-items:center;justify-content:center;
     width:22px;height:22px;flex:none;
   }
   .header-link svg{width:18px;height:18px;flex:none;display:block}
-  .header-coffee .bmc-icon img{width:16px;height:16px;flex:none;display:block}
-  .header-coffee .bmc-icon{background:#FFDD00;border-radius:4px}
+  .header-icon--bmc{background:#FFDD00;border-radius:4px}
+  .header-icon--bmc img{width:14px;height:14px;flex:none;display:block}
 
   /* ---------- workflow steps ---------- */
   .steps{display:flex;flex-direction:column;gap:14px;max-width:520px;text-align:left;margin-top:6px}
