@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenPRF — PS4/PS5 Save Game Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/vendor/crypto-js.min.js" defer></script>
+  <script src="js/vendor/jszip.min.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+<header>
+  <h1>OpenPRF</h1>
+  <span class="sub">Save game terminal — everything stays in your browser</span>
+  <span class="spacer"></span>
+  <div class="header-actions">
+    <a class="header-link" href="https://github.com/YOURNAME/openprf" target="_blank" rel="noopener noreferrer">
+      <span class="header-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.021C22 6.484 17.523 2 12 2z"/></svg>
+      </span>
+      Open source
+    </a>
+    <a class="header-coffee" href="https://buymeacoffee.com/YOURNAME" target="_blank" rel="noopener noreferrer">
+      <span class="bmc-icon"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="" width="16" height="16"></span>
+      Buy Me a Coffee
+    </a>
+  </div>
+</header>
+
+<main>
+  <aside>
+    <div class="drop" id="drop" aria-label="Load save files">
+      <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      </svg>
+      <div class="drop-title">Drop save folder here</div>
+      <div class="drop-hint">or choose below</div>
+      <div class="dropbtns">
+        <button type="button" class="btn small" id="btnPickFolder">Choose folder</button>
+        <button type="button" class="btn ghost small" id="btnPickFiles">Choose files</button>
+      </div>
+      <input type="file" id="fileInput" multiple hidden>
+      <input type="file" id="folderInput" webkitdirectory directory mozdirectory hidden>
+    </div>
+    <div class="gamecard" id="gamecard" hidden>
+      <img id="gcIcon" alt="Game icon" hidden>
+      <div class="gt" id="gcText" hidden>
+        <div class="gname" id="gcName"></div>
+        <div class="gid" id="gcId"></div>
+        <div class="gsub" id="gcSub"></div>
+      </div>
+    </div>
+    <div class="flabel flrow"><span>Save Contents</span><a id="clearAll" role="button" tabindex="0" hidden>clear all</a></div>
+    <div class="filelist" id="filelist">
+      <div class="empty-note">Nothing here yet. Load any decrypted PS4/PS5 save. Nothing is uploaded anywhere.</div>
+    </div>
+  </aside>
+
+  <div class="content">
+    <div class="tabs" id="tabs">
+      <button type="button" class="tab" data-pane="text" disabled>Text</button>
+      <button type="button" class="tab" data-pane="hex" disabled>Hex</button>
+      <button type="button" class="tab" data-pane="img" disabled>Preview</button>
+      <button type="button" class="tab" data-pane="info" disabled>Info</button>
+      <button type="button" class="tab" data-pane="help">Help</button>
+      <span class="tab-spacer"></span>
+      <button type="button" class="tab close-tab" id="btnClose" disabled>Close</button>
+    </div>
+
+    <div class="pane" id="pane-placeholder" style="display:flex">
+      <div class="placeholder">
+        <div class="glyph">[ OPENPRF ]</div>
+        <div class="steps">
+          <div class="step"><b>1</b><span>Export your save from the console and decrypt the outer PS4 container at <a href="https://garlicsaves.com/decrypt" target="_blank" rel="noopener noreferrer">garlicsaves.com/decrypt</a>.</span></div>
+          <div class="step"><b>2</b><span>Drop the decrypted savegame folder on the left — any game works. The title and icon are read from <b>sce_sys/param.sfo</b> and <b>icon0.png</b>.</span></div>
+          <div class="step"><b>3</b><span><b>Save &amp; Download</b> exports one file at a time. If you loaded the whole save folder, use <b>Download all (.zip)</b> to grab everything at once. If you only opened a single file, download it with <b>Save &amp; Download</b> and manually zip it back together with the rest of your save. Re-encrypt at <a href="https://garlicsaves.com/encrypt" target="_blank" rel="noopener noreferrer">garlicsaves.com/encrypt</a> before copying back to the console.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pane" id="pane-text">
+      <div class="filterbar">
+        <button type="button" class="btn small" id="btnFormat">Format</button>
+        <span class="hint">One command per line. Byte count never changes, so the file stays valid.</span>
+      </div>
+      <textarea class="rawtext" id="rawText" spellcheck="false" aria-label="Raw text editor"></textarea>
+    </div>
+
+    <div class="pane" id="pane-hex"><pre class="hex" id="hexView"></pre></div>
+
+    <div class="pane" id="pane-img"><div class="imgprev" id="imgPrev"></div></div>
+
+    <div class="pane" id="pane-help">
+      <div class="help-pane">
+        <div class="glyph">[ OPENPRF ]</div>
+        <div class="steps">
+          <div class="step"><b>1</b><span>Export your save from the console and decrypt the outer PS4 container at <a href="https://garlicsaves.com/decrypt" target="_blank" rel="noopener noreferrer">garlicsaves.com/decrypt</a>.</span></div>
+          <div class="step"><b>2</b><span>Drop the decrypted savegame folder on the left — any game works. The title and icon are read from <b>sce_sys/param.sfo</b> and <b>icon0.png</b>.</span></div>
+          <div class="step"><b>3</b><span><b>Save &amp; Download</b> exports one file at a time. If you loaded the whole save folder, use <b>Download all (.zip)</b> to grab everything at once. If you only opened a single file, download it with <b>Save &amp; Download</b> and manually zip it back together with the rest of your save. Re-encrypt at <a href="https://garlicsaves.com/encrypt" target="_blank" rel="noopener noreferrer">garlicsaves.com/encrypt</a> before copying back to the console.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pane" id="pane-info"><dl class="info" id="infoView"></dl></div>
+
+    <div class="actionbar">
+      <button type="button" class="btn" id="btnApply" disabled>Save &amp; Download</button>
+      <button type="button" class="btn ghost" id="btnDecrypted" disabled>Decrypted copy</button>
+      <button type="button" class="btn ghost" id="btnRevert" disabled>Undo all changes</button>
+      <button type="button" class="btn ghost" id="btnZip" disabled>Download all (.zip)</button>
+      <div class="status">
+        <span id="stFile">—</span>
+        <span class="meter" id="meter" hidden>
+          <span class="lbl" id="meterLbl">text 0 / 1000 B</span>
+          <span class="bar"><i id="meterFill" style="width:0%"></i></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>
